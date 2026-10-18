@@ -1,0 +1,41 @@
+const { chromium } = require('@playwright/test');
+const path = require('path');
+const assert = require('node:assert/strict');
+(async () => {
+ const browser = await chromium.launch({ executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', headless: true });
+ try {
+ const page = await browser.newPage({ viewport: { width: 1440, height: 1050 } });
+ const errors = [];
+ page.on('pageerror', error => errors.push(error.message));
+ await page.goto(process.env.BROWSER_TEST_URL || 'http://localhost:3001');
+ await page.getByText('AI engine connected', { exact: true }).waitFor();
+ await page.screenshot({ path: path.join(__dirname, 'preview-desktop.png'), fullPage: true });
+ await page.getByLabel('Website address').fill('google.com');
+ await page.getByRole('button', { name: 'Analyze link', exact: true }).click();
+ await page.getByText('No strong warning signals.', { exact: true }).waitFor();
+ assert.equal(await page.locator('.history-row').count(), 1);
+ await page.getByRole('button', { name: 'Check another link' }).click();
+ await page.getByLabel('Website address').fill('javascript:alert(1)');
+ await page.getByRole('button', { name: 'Analyze link', exact: true }).click();
+ await page.locator('.error-box').waitFor();
+ assert.match(await page.locator('.error-box').innerText(), /HTTP/);
+ await page.getByRole('button', { name: 'Suspicious pattern' }).click();
+ await page.getByText('This link raises red flags.', { exact: true }).waitFor();
+ await page.screenshot({ path: path.join(__dirname, 'preview-result.png'), fullPage: true });
+ await page.setViewportSize({ width: 390, height: 844 });
+ assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
+ await page.screenshot({ path: path.join(__dirname, 'preview-mobile.png'), fullPage: true });
+ await page.getByRole('link', { name: 'Support', exact: true }).click();
+ await page.getByRole('heading', { name: 'Start a conversation.' }).waitFor();
+ assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
+ await page.getByText('How current is the model?', { exact: true }).click();
+ await page.getByText(/it is not continuously synchronized/).waitFor();
+ await page.screenshot({ path: path.join(__dirname, 'preview-contact-mobile.png'), fullPage: true });
+ await page.setViewportSize({ width: 320, height: 740 });
+ assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
+ await page.setViewportSize({ width: 1440, height: 1050 });
+ await page.screenshot({ path: path.join(__dirname, 'preview-contact.png'), fullPage: true });
+ assert.deepEqual(errors, []);
+ console.log('Browser checks passed: live health, low-risk scan, validation error, suspicious scan, history, support navigation, FAQ, desktop and mobile overflow, no runtime errors.');
+ } finally { await browser.close(); }
+})().catch(error => { console.error(error); process.exit(1); });

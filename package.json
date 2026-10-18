@@ -1,0 +1,12 @@
+{
+  "name": "linkguardian",
+  "version": "0.2.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix frontend run start",
+    "test:backend": "python -m unittest backend.test_backend -v",
+    "test:browser": "node frontend/browser-check.cjs"
+  }
+}
