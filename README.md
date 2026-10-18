@@ -4,6 +4,8 @@
 
 Built by **Viraj Gundewar**.
 
+**Live website:** [linkguardian-ai-pi.vercel.app](https://linkguardian-ai-pi.vercel.app) · **API health:** [linkguardian-api.vercel.app/health](https://linkguardian-api.vercel.app/health) · **Source:** [viraj2510/linkguardian-ai](https://github.com/viraj2510/linkguardian-ai)
+
 ![LinkGuardian desktop interface](frontend/preview-desktop.png)
 
 ## What problem does it solve?

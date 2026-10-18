@@ -2,6 +2,16 @@
 
 The repository contains two services. Deploy both from the same GitHub repository as two Vercel projects. Deploying only the frontend leaves scanning unavailable.
 
+## Current production deployment
+
+- Website: [linkguardian-ai-pi.vercel.app](https://linkguardian-ai-pi.vercel.app)
+- API health: [linkguardian-api.vercel.app/health](https://linkguardian-api.vercel.app/health)
+- API documentation: [linkguardian-api.vercel.app/docs](https://linkguardian-api.vercel.app/docs)
+- Repository: [viraj2510/linkguardian-ai](https://github.com/viraj2510/linkguardian-ai)
+- Vercel team: `viraj-gundewars-projects`, Hobby plan.
+
+The initial deployment was published from each service directory using Vercel CLI. The API URL and allowed frontend origins are saved in the production environment. GitHub automatic deployment integration is a separate optional account permission.
+
 ## 1. Publish the repository
 
 Commit the source, lockfile, documentation, and bundled model. Exclude `.env.local`, `.vercel`, logs, caches, and dependencies using `.gitignore`. Never commit account tokens. Push to the repository owned by the intended GitHub account.
